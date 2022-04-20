@@ -4,6 +4,9 @@
   "description": "manage on-call rotations",
   "main": "src/index.js",
   "types": "src/index.d.ts",
+  "files": [
+    "/src"
+  ],
   "scripts": {
     "test": "uvu tests"
   },

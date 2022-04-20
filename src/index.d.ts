@@ -1,5 +1,7 @@
 export interface User {
   name: string;
+  enable?: boolean;
+  [x: string | number | symbol]: unknown;
 }
 
 export type RotationType = 'day' | 'week';

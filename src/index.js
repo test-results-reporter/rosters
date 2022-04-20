@@ -1,4 +1,4 @@
-const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+require('./helpers/date');
 
 /**
  * get on call person
@@ -6,7 +6,7 @@ const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
  */
 function getOnCallPerson(schedule) {
   const layer = getLayer(schedule.layers);
-  return getUser(layer);
+  return getLayerUser(layer);
 }
 
 /**
@@ -34,20 +34,36 @@ function getLayer(layers) {
 /**
  * @param {import('./index').Layer} layer
  */
-function getUser(layer) {
+function getLayerUser(layer) {
   if (layer.user) {
     return layer.user;
   }
   const rotation = layer.rotation;
   const today = new Date();
-  const day_of_year = Math.ceil((today - new Date(today.getFullYear(), 0, 1)) / MILLISECONDS_PER_DAY);
-  const week_of_year = Math.ceil(day_of_year / 7);
   switch (rotation.every) {
     case 'day':
-      return rotation.users[day_of_year % rotation.users.length];
+      return getUser(rotation.users, today.getDOY() % rotation.users.length);
     default:
-      return rotation.users[week_of_year % rotation.users.length];
+      return getUser(rotation.users, today.getWOY() % rotation.users.length);
   }
+}
+
+/**
+ * @param {import('./index').User[]} users 
+ * @param {number} index 
+ */
+function getUser(users, index) {
+  let count = 0;
+  while (count < users.length) {
+    const user = users[index];
+    if (user.enable === false) {
+      index = (index + 1) % users.length;
+      count++;
+    } else {
+      return user;
+    }
+  }
+  return users[index]
 }
 
 module.exports = {

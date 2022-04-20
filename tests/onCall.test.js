@@ -112,6 +112,24 @@ test('getOnCallPerson - layer with default rotation', () => {
   assert.equal(user, { name: 'mom' });
 });
 
+test('getOnCallPerson - layer with week rotation', () => {
+  const user = getOnCallPerson({
+    layers: [
+      {
+        rotation: {
+          every: 'week',
+          users: [
+            {
+              name: 'mom'
+            }
+          ]
+        }
+      }
+    ]
+  });
+  assert.equal(user, { name: 'mom' });
+});
+
 test('getOnCallPerson - layer with day rotation', () => {
   const user = getOnCallPerson({
     layers: [
@@ -128,6 +146,28 @@ test('getOnCallPerson - layer with day rotation', () => {
     ]
   });
   assert.equal(user, { name: 'mom' });
+});
+
+test('getOnCallPerson - layer with disabled user', () => {
+  const user = getOnCallPerson({
+    layers: [
+      {
+        rotation: {
+          every: 'day',
+          users: [
+            {
+              name: 'mom',
+              enable: false
+            },
+            {
+              name: 'dad'
+            }
+          ]
+        }
+      }
+    ]
+  });
+  assert.equal(user, { name: 'dad' });
 });
 
 test.run();

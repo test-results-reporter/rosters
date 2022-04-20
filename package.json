@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "manage on-call rotations",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "test": "uvu tests"
   },
